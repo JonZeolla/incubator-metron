@@ -28,6 +28,10 @@
   template: src=monit/indexing-elasticsearch.monit dest={{ monit_config_home }}/indexing-elasticsearch.monit
   when: ("enrichment" in group_names) and (install_elasticsearch | default(True))
 
+- name: Remove old monit definition for indexing with elasticsearch
+  file: path={{ monit_config_home }}/enrichment-elasticsearch.monit state=absent
+  when: ("enrichment" in group_names) and (install_elasticsearch | default(True))
+
 - name: Create monit definition for enrichment
   template: src=monit/enrichment.monit dest={{ monit_config_home }}/enrichment.monit
   when: ("enrichment" in group_names)
