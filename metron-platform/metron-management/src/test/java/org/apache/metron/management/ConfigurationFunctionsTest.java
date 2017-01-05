@@ -27,8 +27,9 @@ import org.apache.metron.common.cli.ConfigurationManager;
 import org.apache.metron.common.configuration.ConfigurationsUtils;
 import org.apache.metron.common.dsl.Context;
 import org.apache.metron.common.dsl.ParseException;
-import org.apache.metron.common.stellar.StellarTest;
 import org.apache.metron.test.utils.UnitTestHelper;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import static org.apache.metron.TestConstants.PARSER_CONFIGS_PATH;
 import static org.apache.metron.TestConstants.SAMPLE_CONFIG_PATH;
 import static org.apache.metron.management.utils.FileUtils.slurp;
+import static org.apache.metron.common.utils.StellarProcessorUtils.run;
 
 public class ConfigurationFunctionsTest {
   private TestingServer testZkServer;
@@ -73,11 +75,12 @@ public class ConfigurationFunctionsTest {
   static String goodBroParserConfig = slurp(PARSER_CONFIGS_PATH + "/parsers/bro.json");
 
   /**
-{
-  "sensorTopic" : "brop",
-  "parserConfig" : { },
-  "fieldTransformations" : [ ]
-}*/
+    {
+      "sensorTopic" : "brop",
+      "parserConfig" : { },
+      "fieldTransformations" : [ ]
+    }
+   */
   @Multiline
   static String defaultBropParserConfig;
 
@@ -85,7 +88,7 @@ public class ConfigurationFunctionsTest {
   @Test
   public void testParserGetHappyPath() {
 
-    Object out = StellarTest.run("CONFIG_GET('PARSER', 'bro')", new HashMap<>(), context);
+    Object out = run("CONFIG_GET('PARSER', 'bro')", new HashMap<>(), context);
     Assert.assertEquals(goodBroParserConfig, out);
   }
 
@@ -93,47 +96,51 @@ public class ConfigurationFunctionsTest {
   public void testParserGetMissWithoutDefault() {
 
     {
-      Object out = StellarTest.run("CONFIG_GET('PARSER', 'brop', false)", new HashMap<>(), context);
+      Object out = run("CONFIG_GET('PARSER', 'brop', false)", new HashMap<>(), context);
       Assert.assertNull(out);
     }
   }
 
   @Test
-  public void testParserGetMissWithDefault() {
+  public void testParserGetMissWithDefault() throws Exception {
+    JSONObject expected = (JSONObject) new JSONParser().parse(defaultBropParserConfig);
 
     {
-      Object out = StellarTest.run("CONFIG_GET('PARSER', 'brop')", new HashMap<>(), context);
-      Assert.assertEquals(defaultBropParserConfig, out);
+      Object out = run("CONFIG_GET('PARSER', 'brop')", new HashMap<>(), context);
+      JSONObject actual = (JSONObject) new JSONParser().parse(out.toString().trim());
+      Assert.assertEquals(expected, actual);
     }
     {
-      Object out = StellarTest.run("CONFIG_GET('PARSER', 'brop', true)", new HashMap<>(), context);
-      Assert.assertEquals(defaultBropParserConfig, out);
+      Object out = run("CONFIG_GET('PARSER', 'brop', true)", new HashMap<>(), context);
+      JSONObject actual = (JSONObject) new JSONParser().parse(out.toString().trim());
+      Assert.assertEquals(expected, actual);
     }
   }
 
   static String goodTestEnrichmentConfig = slurp( SAMPLE_CONFIG_PATH + "/enrichments/test.json");
 
   /**
-{
-  "index" : "brop",
-  "batchSize" : 0,
-  "enrichment" : {
-    "fieldMap" : { },
-    "fieldToTypeMap" : { },
-    "config" : { }
-  },
-  "threatIntel" : {
-    "fieldMap" : { },
-    "fieldToTypeMap" : { },
-    "config" : { },
-    "triageConfig" : {
-      "riskLevelRules" : { },
-      "aggregator" : "MAX",
-      "aggregationConfig" : { }
+    {
+      "index" : "brop",
+      "batchSize" : 0,
+      "enrichment" : {
+        "fieldMap" : { },
+        "fieldToTypeMap" : { },
+        "config" : { }
+      },
+      "threatIntel" : {
+        "fieldMap" : { },
+        "fieldToTypeMap" : { },
+        "config" : { },
+        "triageConfig" : {
+          "riskLevelRules" : { },
+          "aggregator" : "MAX",
+          "aggregationConfig" : { }
+        }
+      },
+      "configuration" : { }
     }
-  },
-  "configuration" : { }
-}*/
+   */
   @Multiline
   static String defaultBropEnrichmentConfig;
 
@@ -141,7 +148,7 @@ public class ConfigurationFunctionsTest {
   @Test
   public void testEnrichmentGetHappyPath() {
 
-    Object out = StellarTest.run("CONFIG_GET('ENRICHMENT', 'test')", new HashMap<>(), context);
+    Object out = run("CONFIG_GET('ENRICHMENT', 'test')", new HashMap<>(), context);
     Assert.assertEquals(goodTestEnrichmentConfig, out.toString().trim());
   }
 
@@ -149,21 +156,24 @@ public class ConfigurationFunctionsTest {
   public void testEnrichmentGetMissWithoutDefault() {
 
     {
-      Object out = StellarTest.run("CONFIG_GET('ENRICHMENT', 'brop', false)", new HashMap<>(), context);
+      Object out = run("CONFIG_GET('ENRICHMENT', 'brop', false)", new HashMap<>(), context);
       Assert.assertNull(out);
     }
   }
 
   @Test
-  public void testEnrichmentGetMissWithDefault() {
+  public void testEnrichmentGetMissWithDefault() throws Exception {
+    JSONObject expected = (JSONObject) new JSONParser().parse(defaultBropEnrichmentConfig);
 
     {
-      Object out = StellarTest.run("CONFIG_GET('ENRICHMENT', 'brop')", new HashMap<>(), context);
-      Assert.assertEquals(defaultBropEnrichmentConfig, out.toString().trim());
+      Object out = run("CONFIG_GET('ENRICHMENT', 'brop')", new HashMap<>(), context);
+      JSONObject actual = (JSONObject) new JSONParser().parse(out.toString().trim());
+      Assert.assertEquals(expected, actual);
     }
     {
-      Object out = StellarTest.run("CONFIG_GET('ENRICHMENT', 'brop', true)", new HashMap<>(), context);
-      Assert.assertEquals(defaultBropEnrichmentConfig, out.toString().trim());
+      Object out = run("CONFIG_GET('ENRICHMENT', 'brop', true)", new HashMap<>(), context);
+      JSONObject actual = (JSONObject) new JSONParser().parse(out.toString().trim());
+      Assert.assertEquals(expected, actual);
     }
   }
 
@@ -172,14 +182,14 @@ public class ConfigurationFunctionsTest {
   @Test
   public void testGlobalGet() {
 
-    Object out = StellarTest.run("CONFIG_GET('GLOBAL')", new HashMap<>(), context);
+    Object out = run("CONFIG_GET('GLOBAL')", new HashMap<>(), context);
     Assert.assertEquals(goodGlobalConfig, out.toString().trim());
   }
 
   @Test
   public void testGlobalPut() {
 
-    Object out = StellarTest.run("CONFIG_GET('GLOBAL')", new HashMap<>(), context);
+    Object out = run("CONFIG_GET('GLOBAL')", new HashMap<>(), context);
     Assert.assertEquals(goodGlobalConfig, out.toString().trim());
   }
 
@@ -188,7 +198,7 @@ public class ConfigurationFunctionsTest {
     {
       UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.FATAL);
       try {
-        StellarTest.run("CONFIG_PUT('GLOBAL', 'foo bar')", new HashMap<>(), context);
+        run("CONFIG_PUT('GLOBAL', 'foo bar')", new HashMap<>(), context);
       } catch(ParseException e) {
         UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.ERROR);
         throw e;
@@ -198,11 +208,11 @@ public class ConfigurationFunctionsTest {
 
   @Test
   public void testEnrichmentPut() throws InterruptedException {
-    String brop= (String) StellarTest.run("CONFIG_GET('ENRICHMENT', 'testEnrichmentPut')", new HashMap<>(), context);
-    StellarTest.run("CONFIG_PUT('ENRICHMENT', config, 'testEnrichmentPut')", ImmutableMap.of("config", brop), context);
+    String brop= (String) run("CONFIG_GET('ENRICHMENT', 'testEnrichmentPut')", new HashMap<>(), context);
+    run("CONFIG_PUT('ENRICHMENT', config, 'testEnrichmentPut')", ImmutableMap.of("config", brop), context);
     boolean foundMatch = false;
     for(int i = 0;i < 10 && !foundMatch;++i) {
-      String bropNew = (String) StellarTest.run("CONFIG_GET('ENRICHMENT', 'testEnrichmentPut', false)", new HashMap<>(), context);
+      String bropNew = (String) run("CONFIG_GET('ENRICHMENT', 'testEnrichmentPut', false)", new HashMap<>(), context);
       foundMatch =  brop.equals(bropNew);
       if(foundMatch) {
         break;
@@ -218,7 +228,7 @@ public class ConfigurationFunctionsTest {
       {
         UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.FATAL);
         try {
-          StellarTest.run("CONFIG_PUT('ENRICHMENT', config, 'brop')", ImmutableMap.of("config", "foo bar"), context);
+          run("CONFIG_PUT('ENRICHMENT', config, 'brop')", ImmutableMap.of("config", "foo bar"), context);
         } catch(ParseException e) {
           UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.ERROR);
           throw e;
@@ -229,11 +239,11 @@ public class ConfigurationFunctionsTest {
 
   @Test
   public void testParserPut() throws InterruptedException {
-    String brop= (String) StellarTest.run("CONFIG_GET('PARSER', 'testParserPut')", new HashMap<>(), context);
-    StellarTest.run("CONFIG_PUT('PARSER', config, 'testParserPut')", ImmutableMap.of("config", brop), context);
+    String brop= (String) run("CONFIG_GET('PARSER', 'testParserPut')", new HashMap<>(), context);
+    run("CONFIG_PUT('PARSER', config, 'testParserPut')", ImmutableMap.of("config", brop), context);
     boolean foundMatch = false;
     for(int i = 0;i < 10 && !foundMatch;++i) {
-      String bropNew = (String) StellarTest.run("CONFIG_GET('PARSER', 'testParserPut', false)", new HashMap<>(), context);
+      String bropNew = (String) run("CONFIG_GET('PARSER', 'testParserPut', false)", new HashMap<>(), context);
       foundMatch =  brop.equals(bropNew);
       if(foundMatch) {
         break;
@@ -248,7 +258,7 @@ public class ConfigurationFunctionsTest {
     {
       UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.FATAL);
       try {
-        StellarTest.run("CONFIG_PUT('PARSER', config, 'brop')", ImmutableMap.of("config", "foo bar"), context);
+        run("CONFIG_PUT('PARSER', config, 'brop')", ImmutableMap.of("config", "foo bar"), context);
       } catch(ParseException e) {
         UnitTestHelper.setLog4jLevel(ConfigurationFunctions.class, Level.ERROR);
         throw e;

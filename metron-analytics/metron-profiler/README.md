@@ -41,7 +41,7 @@ This section will describe the steps required to get your first profile running.
 
 1. Upload the profile definition to Zookeeper.
     ```
-    $ cd /usr/metron/0.3.0/
+    $ cd $METRON_HOME
     $ bin/zk_load_configs.sh -m PUSH -i config/zookeeper/ -z node1:2181
     ```
 
@@ -161,17 +161,20 @@ The Profiler runs as an independent Storm topology.  The configuration for the P
 | profiler.executors | The number of executors to spawn per component.  |
 | profiler.input.topic | The name of the Kafka topic from which to consume data.  |
 | profiler.period.duration | The duration of each profile period.  This value should be defined along with `profiler.period.duration.units`.  |
-| profiler.period.duration.units | The units used to specify the profile period duration.  This value should be defined along with `profiler.period.duration`. |
+| profiler.period.duration.units | The units used to specify the `profiler.period.duration`. |
+| profiler.ttl | If a message has not been applied to a Profile in this period of time, the Profile will be forgotten and its resources will be cleaned up. This value should be defined along with `profiler.ttl.units`. |
+| profiler.ttl.units | The units used to specify the `profiler.ttl`. |
 | profiler.hbase.salt.divisor  |  A salt is prepended to the row key to help prevent hotspotting.  This constant is used to generate the salt.  Ideally, this constant should be roughly equal to the number of nodes in the Hbase cluster.  |
 | profiler.hbase.table | The name of the HBase table that profiles are written to.  |
 | profiler.hbase.column.family | The column family used to store profiles. |
 | profiler.hbase.batch | The number of puts that are written in a single batch.  |
 | profiler.hbase.flush.interval.seconds | The maximum number of seconds between batch writes to HBase. |
 
+
 After altering the configuration, start the Profiler.
 
 ```
-$ /usr/metron/0.3.0/start_profiler_topology.sh
+$ $METRON_HOME/start_profiler_topology.sh
 ```
 
 ## Examples

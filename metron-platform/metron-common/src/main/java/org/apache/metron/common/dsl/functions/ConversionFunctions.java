@@ -60,4 +60,24 @@ public class ConversionFunctions {
       super(Double.class);
     }
   }
+
+  @Stellar(name="TO_LONG"
+          , description="Transforms the first argument to a long integer"
+          , params = { "input - Object of string or numeric type"}
+          , returns = "Long version of the first argument"
+  )
+  public static class TO_LONG extends Cast<Long> {
+
+    public TO_LONG() { super(Long.class); }
+  }
+
+  @Stellar(name="TO_FLOAT"
+      , description="Transforms the first argument to a float"
+      , params = { "input - Object of string or numeric type"}
+      , returns = "Float version of the first argument"
+  )
+  public static class TO_FLOAT extends Cast<Float> {
+
+    public TO_FLOAT() { super(Float.class); }
+  }
 }

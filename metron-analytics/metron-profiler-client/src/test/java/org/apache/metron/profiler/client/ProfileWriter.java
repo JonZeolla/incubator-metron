@@ -70,32 +70,29 @@ public class ProfileWriter {
     ProfileMeasurement m = prototype;
     for(int i=0; i<count; i++) {
 
-      // create a measurement for the next profile period to be written
-      ProfilePeriod next = m.getPeriod().next();
-      m = new ProfileMeasurement(
-              prototype.getProfileName(),
-              prototype.getEntity(),
-              next.getStartTimeMillis(),
-              prototype.getPeriod().getDurationMillis(),
-              TimeUnit.MILLISECONDS);
-
       // generate the next value that should be written
       Object nextValue = valueGenerator.apply(m.getValue());
-      m.setValue(nextValue);
 
-      // write the measurement
-      write(m, group);
+      // create a measurement for the next profile period to be written
+      ProfilePeriod next = m.getPeriod().next();
+      m = new ProfileMeasurement()
+              .withProfileName(prototype.getProfileName())
+              .withEntity(prototype.getEntity())
+              .withPeriod(next.getStartTimeMillis(), prototype.getPeriod().getDurationMillis(), TimeUnit.MILLISECONDS)
+              .withGroups(group)
+              .withValue(nextValue);
+
+      write(m);
     }
   }
 
   /**
    * Write a ProfileMeasurement.
    * @param m The ProfileMeasurement to write.
-   * @param groups The groups to use when writing the ProfileMeasurement.
    */
-  private void write(ProfileMeasurement m, List<Object> groups) {
+  private void write(ProfileMeasurement m) {
 
-    byte[] rowKey = rowKeyBuilder.rowKey(m, groups);
+    byte[] rowKey = rowKeyBuilder.rowKey(m);
     ColumnList cols = columnBuilder.columns(m);
 
     hbaseClient.addMutation(rowKey, cols, Durability.SKIP_WAL);
@@ -115,7 +112,10 @@ public class ProfileWriter {
     HTableInterface table = provider.getTable(config, "profiler");
 
     long when = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(2);
-    ProfileMeasurement measure = new ProfileMeasurement("profile1", "192.168.66.121", when, 15, TimeUnit.MINUTES);
+    ProfileMeasurement measure = new ProfileMeasurement()
+            .withProfileName("profile1")
+            .withEntity("192.168.66.121")
+            .withPeriod(when, 15, TimeUnit.MINUTES);
 
     ProfileWriter writer = new ProfileWriter(rowKeyBuilder, columnBuilder, table);
     writer.write(measure, 2 * 24 * 4, Collections.emptyList(), val -> new Random().nextInt(10));

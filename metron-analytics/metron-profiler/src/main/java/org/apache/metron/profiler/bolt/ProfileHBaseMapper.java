@@ -20,10 +20,7 @@
 
 package org.apache.metron.profiler.bolt;
 
-import org.apache.storm.tuple.Tuple;
-import org.apache.commons.beanutils.BeanMap;
 import org.apache.metron.common.configuration.profiler.ProfileConfig;
-import org.apache.metron.common.dsl.ParseException;
 import org.apache.metron.hbase.bolt.mapper.ColumnList;
 import org.apache.metron.hbase.bolt.mapper.HBaseMapper;
 import org.apache.metron.profiler.ProfileMeasurement;
@@ -31,24 +28,14 @@ import org.apache.metron.profiler.hbase.ColumnBuilder;
 import org.apache.metron.profiler.hbase.RowKeyBuilder;
 import org.apache.metron.profiler.hbase.SaltyRowKeyBuilder;
 import org.apache.metron.profiler.hbase.ValueOnlyColumnBuilder;
-import org.apache.metron.profiler.stellar.StellarExecutor;
+import org.apache.storm.tuple.Tuple;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-import static java.lang.String.format;
-import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 /**
  * An HbaseMapper that defines how a ProfileMeasurement is persisted within an HBase table.
  */
 public class ProfileHBaseMapper implements HBaseMapper {
-
-  /**
-   * Executes Stellar code and maintains state across multiple invocations.
-   */
-  private StellarExecutor executor;
 
   /**
    * Generates the row keys necessary to store profile data in HBase.
@@ -78,9 +65,8 @@ public class ProfileHBaseMapper implements HBaseMapper {
    */
   @Override
   public byte[] rowKey(Tuple tuple) {
-    ProfileMeasurement m = (ProfileMeasurement) tuple.getValueByField("measurement");
-    List<Object> groups = executeGroupBy(m);
-    return rowKeyBuilder.rowKey(m, groups);
+    ProfileMeasurement measurement = (ProfileMeasurement) tuple.getValueByField("measurement");
+    return rowKeyBuilder.rowKey(measurement);
   }
 
   /**
@@ -105,48 +91,14 @@ public class ProfileHBaseMapper implements HBaseMapper {
    */
   @Override
   public Optional<Long> getTTL(Tuple tuple) {
-    Optional result = Optional.empty();
+    Optional<Long> result = Optional.empty();
 
     ProfileConfig profileConfig = (ProfileConfig) tuple.getValueByField("profile");
     if(profileConfig.getExpires() != null) {
-      result = result.of(profileConfig.getExpires());
+      result = Optional.of(profileConfig.getExpires());
     }
 
     return result;
-  }
-
-  /**
-   * Executes each of the 'groupBy' expressions.  The result of each
-   * expression are the groups used to sort the data as part of the
-   * row key.
-   * @param m The profile measurement.
-   * @return The result of executing the 'groupBy' expressions.
-   */
-  private List<Object> executeGroupBy(ProfileMeasurement m) {
-    List<Object> groups = new ArrayList<>();
-
-    if(!isEmpty(m.getGroupBy())) {
-      try {
-        // allows each 'groupBy' expression to refer to the fields of the ProfileMeasurement
-        BeanMap measureAsMap = new BeanMap(m);
-
-        for (String expr : m.getGroupBy()) {
-          Object result = executor.execute(expr, measureAsMap, Object.class);
-          groups.add(result);
-        }
-
-      } catch(Throwable e) {
-        String msg = format("Bad 'groupBy' expression: %s, profile=%s, entity=%s",
-                e.getMessage(), m.getProfileName(), m.getEntity());
-        throw new ParseException(msg, e);
-      }
-    }
-
-    return groups;
-  }
-
-  public void setExecutor(StellarExecutor executor) {
-    this.executor = executor;
   }
 
   public void setRowKeyBuilder(RowKeyBuilder rowKeyBuilder) {

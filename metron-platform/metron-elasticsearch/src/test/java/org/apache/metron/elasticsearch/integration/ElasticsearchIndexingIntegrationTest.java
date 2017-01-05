@@ -26,8 +26,8 @@ import org.apache.metron.integration.InMemoryComponent;
 import org.apache.metron.integration.Processor;
 import org.apache.metron.integration.ProcessorResult;
 import org.apache.metron.integration.ReadinessState;
-import org.apache.metron.integration.components.KafkaWithZKComponent;
 import org.apache.metron.elasticsearch.integration.components.ElasticSearchComponent;
+import org.apache.metron.integration.components.KafkaComponent;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,9 +62,10 @@ public class ElasticsearchIndexingIntegrationTest extends IndexingIntegrationTes
     return new Processor<List<Map<String, Object>>>() {
       List<Map<String, Object>> docs = null;
       List<byte[]> errors = null;
+      @Override
       public ReadinessState process(ComponentRunner runner) {
         ElasticSearchComponent elasticSearchComponent = runner.getComponent("search", ElasticSearchComponent.class);
-        KafkaWithZKComponent kafkaWithZKComponent = runner.getComponent("kafka", KafkaWithZKComponent.class);
+        KafkaComponent kafkaComponent = runner.getComponent("kafka", KafkaComponent.class);
         if (elasticSearchComponent.hasIndex(index)) {
           List<Map<String, Object>> docsFromDisk;
           try {
@@ -75,7 +76,7 @@ public class ElasticsearchIndexingIntegrationTest extends IndexingIntegrationTes
             throw new IllegalStateException("Unable to retrieve indexed documents.", e);
           }
           if (docs.size() < inputMessages.size() || docs.size() != docsFromDisk.size()) {
-            errors = kafkaWithZKComponent.readMessages(Constants.INDEXING_ERROR_TOPIC);
+            errors = kafkaComponent.readMessages(Constants.INDEXING_ERROR_TOPIC);
             if(errors.size() > 0){
               return ReadinessState.READY;
             }
@@ -88,6 +89,7 @@ public class ElasticsearchIndexingIntegrationTest extends IndexingIntegrationTes
         }
       }
 
+      @Override
       public ProcessorResult<List<Map<String, Object>>> getResult()  {
         ProcessorResult.Builder<List<Map<String,Object>>> builder = new ProcessorResult.Builder();
         return builder.withResult(docs).withProcessErrors(errors).build();

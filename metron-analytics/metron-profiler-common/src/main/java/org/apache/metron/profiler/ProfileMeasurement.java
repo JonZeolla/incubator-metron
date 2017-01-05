@@ -20,6 +20,7 @@
 
 package org.apache.metron.profiler;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,26 +48,43 @@ public class ProfileMeasurement {
   private Object value;
 
   /**
-   * A set of expressions used to group the profile measurements when persisted.
+   * The 'groups' used to sort the Profile data. The groups are the result of
+   * executing the Profile's 'groupBy' expression.
    */
-  private List<String> groupBy;
+  private List<Object> groups;
 
   /**
    * The period in which the ProfileMeasurement was taken.
    */
   private ProfilePeriod period;
 
-  /**
-   * @param profileName The name of the profile.
-   * @param entity The name of the entity being profiled.
-   * @param whenMillis When the measurement was taken in epoch milliseconds.
-   * @param periodDuration The duration of each profile period.
-   * @param periodUnits The units of the duration of each profile period.
-   */
-  public ProfileMeasurement(String profileName, String entity, long whenMillis, long periodDuration, TimeUnit periodUnits) {
+  public ProfileMeasurement() {
+    this.groups = Collections.emptyList();
+  }
+
+  public ProfileMeasurement withProfileName(String profileName) {
     this.profileName = profileName;
+    return this;
+  }
+
+  public ProfileMeasurement withEntity(String entity) {
     this.entity = entity;
+    return this;
+  }
+
+  public ProfileMeasurement withValue(Object value) {
+    this.value = value;
+    return this;
+  }
+
+  public ProfileMeasurement withGroups(List<Object> groups) {
+    this.groups = groups;
+    return this;
+  }
+
+  public ProfileMeasurement withPeriod(long whenMillis, long periodDuration, TimeUnit periodUnits) {
     this.period = new ProfilePeriod(whenMillis, periodDuration, periodUnits);
+    return this;
   }
 
   public String getProfileName() {
@@ -85,16 +103,8 @@ public class ProfileMeasurement {
     return period;
   }
 
-  public List<String> getGroupBy() {
-    return groupBy;
-  }
-
-  public void setValue(Object value) {
-    this.value = value;
-  }
-
-  public void setGroupBy(List<String> groupBy) {
-    this.groupBy = groupBy;
+  public List<Object> getGroups() {
+    return groups;
   }
 
   @Override
@@ -103,12 +113,12 @@ public class ProfileMeasurement {
     if (o == null || getClass() != o.getClass()) return false;
 
     ProfileMeasurement that = (ProfileMeasurement) o;
+
     if (profileName != null ? !profileName.equals(that.profileName) : that.profileName != null) return false;
     if (entity != null ? !entity.equals(that.entity) : that.entity != null) return false;
     if (value != null ? !value.equals(that.value) : that.value != null) return false;
-    if (groupBy != null ? !groupBy.equals(that.groupBy) : that.groupBy != null) return false;
+    if (groups != null ? !groups.equals(that.groups) : that.groups != null) return false;
     return period != null ? period.equals(that.period) : that.period == null;
-
   }
 
   @Override
@@ -116,7 +126,7 @@ public class ProfileMeasurement {
     int result = profileName != null ? profileName.hashCode() : 0;
     result = 31 * result + (entity != null ? entity.hashCode() : 0);
     result = 31 * result + (value != null ? value.hashCode() : 0);
-    result = 31 * result + (groupBy != null ? groupBy.hashCode() : 0);
+    result = 31 * result + (groups != null ? groups.hashCode() : 0);
     result = 31 * result + (period != null ? period.hashCode() : 0);
     return result;
   }
@@ -127,7 +137,7 @@ public class ProfileMeasurement {
             "profileName='" + profileName + '\'' +
             ", entity='" + entity + '\'' +
             ", value=" + value +
-            ", groupBy=" + groupBy +
+            ", groups=" + groups +
             ", period=" + period +
             '}';
   }

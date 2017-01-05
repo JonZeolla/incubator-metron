@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -22,16 +22,17 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Stack;
+
 import org.apache.metron.common.dsl.*;
+import org.apache.metron.common.dsl.functions.resolver.FunctionResolver;
+import org.apache.metron.common.stellar.evaluators.ArithmeticEvaluator;
+import org.apache.metron.common.stellar.evaluators.NumberLiteralEvaluator;
 import org.apache.metron.common.stellar.generated.StellarBaseListener;
 import org.apache.metron.common.stellar.generated.StellarLexer;
 import org.apache.metron.common.stellar.generated.StellarParser;
-
-import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -85,7 +86,10 @@ public class BaseStellarProcessor<T> {
     TokenStream tokens = new CommonTokenStream(lexer);
     StellarParser parser = new StellarParser(tokens);
 
-    StellarCompiler treeBuilder = new StellarCompiler(variableResolver, functionResolver, context);
+    StellarCompiler treeBuilder = new StellarCompiler(variableResolver, functionResolver, context, new Stack<>(),
+        ArithmeticEvaluator.INSTANCE,
+        NumberLiteralEvaluator.INSTANCE
+    );
     parser.addParseListener(treeBuilder);
     parser.removeErrorListeners();
     parser.addErrorListener(new ErrorListener());
