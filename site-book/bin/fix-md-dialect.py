@@ -307,6 +307,7 @@ for FILENAME in sys.argv[1:] :
             trace("in codeblock, regular line")
             # what happens in the codeblock, stays in the codeblock
             # Put this case first (after link detection), so we don't have to test it in all the other cases.
+            ###### TODO:  Need to detect indentation.  if true, then remove any [^\s$] line ######
             print >>outfile, inputline
             continue
 
