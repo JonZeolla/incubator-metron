@@ -18,15 +18,27 @@
 #ifndef BRO_PLUGIN_BRO_KAFKA_KAFKAWRITER_H
 #define BRO_PLUGIN_BRO_KAFKA_KAFKAWRITER_H
 
-#include <librdkafka/rdkafkacpp.h>
 #include <string>
-#include <Type.h>
+#include <librdkafka/rdkafkacpp.h>
 #include <logging/WriterBackend.h>
-#include <threading/formatters/JSON.h>
+#include <threading/formatters/JSON.h>	# TODO: Necessary?
+#include <Type.h>
 #include <threading/Formatter.h>
 
 #include "kafka.bif.h"
-#include "TaggedJSON.h"
+#include "TaggedJSON.h"			# TODO: Necessary?
+
+// Forward declarations
+namespace RdKafka {
+    class Conf;
+    class Producer;
+    class Topic;
+}
+
+namespace threading {
+  namespace formatter {
+    class Formatter;
+}}
 
 namespace logging { namespace writer {
 
@@ -54,12 +66,16 @@ protected:
     virtual bool DoHeartbeat(double network_time, double current_time);
 
 private:
+    static const string default_topic_key;
+    string stream_id;
     string topic_name;
+    bool tag_json;
+    map<string, string> kafka_conf;
     threading::formatter::Formatter *formatter;
-    RdKafka::Producer* producer;
-    RdKafka::Topic* topic;
-    RdKafka::Conf* conf;
-    RdKafka::Conf* topic_conf;
+    RdKafka::Producer* rd_producer;
+    RdKafka::Topic* rd_topic;
+    RdKafka::Conf* rd_conf;
+    RdKafka::Conf* rd_topic_conf;
 };
 
 }}

@@ -14,7 +14,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
-# - Try to find openssl include dirs and libraries
+# - Try to find openssl include dirs and libraries 
 #
 # Usage of this module as follows:
 #
@@ -30,7 +30,7 @@
 # Variables defined by this module:
 #
 #  OPENSSL_FOUND             System has openssl, include and library dirs found
-#  OpenSSL_INCLUDE_DIR       The openssl include directories.
+#  OpenSSL_INCLUDE_DIR       The openssl include directories. 
 #  OpenSSL_LIBRARIES         The openssl libraries.
 #  OpenSSL_CYRPTO_LIBRARY    The openssl crypto library.
 #  OpenSSL_SSL_LIBRARY       The openssl ssl library.
@@ -47,11 +47,13 @@ find_path(OpenSSL_INCLUDE_DIR
 find_library(OpenSSL_SSL_LIBRARY
     NAMES ssl ssleay32 ssleay32MD
     HINTS ${OpenSSL_ROOT_DIR}/lib
+    PATH_SUFFIXES ${CMAKE_LIBRARY_ARCHITECTURE}
 )
 
 find_library(OpenSSL_CRYPTO_LIBRARY
     NAMES crypto
     HINTS ${OpenSSL_ROOT_DIR}/lib
+    PATH_SUFFIXES ${CMAKE_LIBRARY_ARCHITECTURE}
 )
 
 set(OpenSSL_LIBRARIES ${OpenSSL_SSL_LIBRARY} ${OpenSSL_CRYPTO_LIBRARY}
