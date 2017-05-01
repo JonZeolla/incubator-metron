@@ -237,6 +237,260 @@
         "qtype_name": {
           "type": "string",
           "index": "not_analyzed"
+        },
+        "analyzer": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "failure_reason": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "user": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "password": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "command": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "arg": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "mime_type": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "file_size": {
+          "type": "long"
+        },
+        "reply_code": {
+          "type": "integer"
+        },
+        "reply_msg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "data_channel:passive": {
+          "type": "boolean"
+        },
+        "data_channel:orig_h": {
+          "type": "ip"
+        },
+        "data_channel:resp_h": {
+          "type": "ip"
+        },
+        "data_channel:resp_p": {
+          "type": "integer"
+        },
+        "cwd": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "passive": {
+          "type": "boolean"
+        },
+        "capture_password": {
+          "type": "boolean"
+        },
+        "fuid": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "tx_hosts": {
+          "type": "ip"
+        },
+        "rx_hosts": {
+          "type": "ip"
+        },
+        "conn_uids": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "source": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "depth": {
+          "type": "integer"
+        },
+        "analyzers": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "filename": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "duration": {
+          "type": "float"
+        },
+        "local_orig": {
+          "type": "boolean"
+        },
+        "is_orig": {
+          "type": "boolean"
+        },
+        "seen_bytes": {
+          "type": "long"
+        },
+        "total_bytes": {
+          "type": "long"
+        },
+        "missing_bytes": {
+          "type": "long"
+        },
+        "overflow_bytes": {
+          "type": "long"
+        },
+        "timedout": {
+          "type": "boolean"
+        },
+        "parent_fuid": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "md5": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sha1": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sha256": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "port_num": {
+          "type": "integer"
+        },
+        "subject": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "issuer_subject": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "serial": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "helo": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "mailfrom": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "rcptto": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "date": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "from": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "to": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "reply_to": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "msg_id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "in_reply_to": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "x_originating_ip": {
+          "type": "ip"
+        },
+        "first_received": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "second_received": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "last_reply": {
+          "type": "string",
+          "analyzer": "simple"
+        },
+        "path": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "fuids": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "is_webmail": {
+          "type": "boolean"
+        },
+        "version": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "cipher": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "curve": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "server_name": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "resumed": {
+          "type": "boolean"
+        },
+        "last_alert": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "next_protocol": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "established": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "addl": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "notice": {
+          "type": "boolean"
+        },
+        "peer": {
+          "type": "string",
+          "index": "not_analyzed"
         }
       }
     }
