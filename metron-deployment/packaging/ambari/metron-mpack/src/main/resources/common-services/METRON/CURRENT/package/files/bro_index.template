@@ -687,6 +687,85 @@
         "result": {
           "type": "string",
           "index": "not_analyzed"
+        },
+        "id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.version": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "certificate.serial": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.subject": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.issuer": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.not_valid_before": {
+          "type": "string", #time
+          "index": "not_analyzed"
+        },
+        "certificate.not_valid_after": {
+          "type": "string", #time
+          "index": "not_analyzed"
+        },
+        "certificate.key_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.sig_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.key_type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.key_length": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "certificate.exponent": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "certificate.curve": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "san.dns": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "san.uri": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "san.email": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "san.ip": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "basic_constraints.ca": {
+          "type": "boolean"
+        },
+        "basic_constraints.path_len": {
+          "type": "integer",
+          "index": "not_analyzed"
         }
       }
     }
