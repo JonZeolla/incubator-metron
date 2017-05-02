@@ -492,6 +492,192 @@
         "peer": {
           "type": "string",
           "index": "not_analyzed"
+        },
+        "service": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "orig_bytes": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "resp_bytes": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "conn_state": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "local_resp": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "missed_bytes": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "history": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "orig_pkts": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "orig_ip_bytes": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "resp_pkts": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "resp_ip_bytes": {
+          "type": "long",
+          "index": "not_analyzed"
+        },
+        "tunnel_parents": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "file_mime_type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "file_desc": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "note": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "msg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "sub": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "src": {
+          "type": "ip"
+        },
+        "dst": {
+          "type": "ip"
+        },
+        "p": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "n": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "src_peer": {
+          "type": "ip"
+        },
+        "peer_descr": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "actions": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "suppress_for": {
+          "type": "double",
+          "index": "not_analyzed"
+        },
+        "dropped": {
+          "type": "boolean"
+        },
+        "mac": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "assigned_ip": {
+          "type": "ip"
+        },
+        "lease_time": {
+          "type": "float",
+          "index": "not_analyzed"
+        },
+        "auth_success": {
+          "type": "boolean"
+        },
+        "auth_attempts": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "direction": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "client": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "server": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "cipher_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "mac_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "compression_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "kex_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "host_key_alg": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "host_key": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "host_p": {
+          "type": "integer",
+          "index": "not_analyzed"
+        },
+        "software_type": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "version.major": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "version.minor": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "version.minor2": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "version.minor3": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "version.addl": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "unparsed_version": {
+          "type": "string",
+          "index": "simple"
         }
       }
     }
