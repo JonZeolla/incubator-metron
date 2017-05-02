@@ -303,12 +303,6 @@
           "type": "string",
           "index": "not_analyzed"
         },
-        "tx_hosts": {
-          "type": "ip"
-        },
-        "rx_hosts": {
-          "type": "ip"
-        },
         "conn_uids": {
           "type": "string",
           "analyzer": "simple"
