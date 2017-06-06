@@ -127,4 +127,4 @@ blueprint:
       cardinality: 1
       configurations: []
       components: "{{ metron_components }}"
-      hosts: "{{ hdp_host_group }}"
+      hosts: "{{ groups.ambari_master }}"

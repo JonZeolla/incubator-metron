@@ -110,6 +110,21 @@ Having successfully created your Amazon Web Services account, hopefully you will
 Advanced Usage
 --------------
 
+### Spinning up multiple single node instances
+
+```
+for x in 0{0..9}; do
+  cd /Users/name/directory/metron/metron-deployment/amazon-ec2
+  cp ~/.ssh/id_rsa{,.bkp}
+  cp ~/.ssh/id_rsa.pub{,.bkp}
+  cp ~/.ssh/METRON${x}.pem ~/.ssh/id_rsa
+  cp ~/.ssh/METRON${x}.pub ~/.ssh/id_rsa.pub
+  ./run.sh METRON${x} | tee -a ~/METRON${x}.log
+done
+```
+
+Don't forget to setup your SSH config to log into all of your instances, setup the management UI, update the Ambari login, etc.
+
 ### Multiple Environments
 
 This process can support provisioning of multiple, isolated environments.  Simply change the `env` settings in `conf/defaults.yml`.  For example, you might provision separate development, test, and production environments.
