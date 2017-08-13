@@ -11,7 +11,7 @@ virtualbox-iso|virtualbox-ovf)
         # generated
         # https://access.redhat.com/site/solutions/58625 (subscription required)
         echo 'RES_OPTIONS="single-request-reopen"' >>/etc/sysconfig/network;
-        echo "192.168.66.121 node1"  >>/etc/hosts;
+        echo "192.168.66.121 node1" >>/etc/hosts;
         service network restart;
         echo 'Slow DNS fix applied (single-request-reopen)';
     fi

@@ -53,7 +53,8 @@ hosts = [{
 Vagrant.configure(2) do |config|
 
   # all hosts built on centos 6
-  config.vm.box = "metron/centos_base"
+  # TODO:  Move to metron/centos7_base or similar
+  config.vm.box = "jonzeolla/centos7_base"
   config.ssh.insert_key = true
 
   # enable the hostmanager plugin

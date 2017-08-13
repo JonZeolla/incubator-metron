@@ -3,7 +3,7 @@
     {
       "type": "virtualbox-iso",
       "boot_command": [
-        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}} ksdevice=eth0<enter><wait>"
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `ks_path`}} ksdevice=enp0s0<enter><wait>"
       ],
       "boot_wait": "10s",
       "disk_size": 40960,
@@ -71,6 +71,7 @@
         "scripts/common/sshd.sh",
         "scripts/centos/networking.sh",
         "scripts/common/vagrant.sh",
+        "scripts/common/virtualbox.sh",
         "scripts/centos/update_all.sh",
         "scripts/common/reboot.sh"
       ],
@@ -84,7 +85,7 @@
     },
     {
       "type": "shell",
-      "pause_before" : "2m",
+      "pause_before": "2m",
       "scripts": [
         "scripts/common/vmtools.sh",
         "scripts/centos/cleanup.sh",
@@ -100,24 +101,24 @@
     }
   ],
   "variables": {
-    "box_basename": "base-centos-6.7",
+    "box_basename": "base-centos-7.3",
     "build_timestamp": "{{isotime \"20060102150405\"}}",
     "cpus": "1",
     "git_revision": "__unknown_git_revision__",
     "headless": "",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
-    "iso_checksum": "c0c1a05d3d74fb093c6232003da4b22b0680f59d3b2fa2cb7da736bc40b3f2c5",
+    "iso_checksum": "c455ee948e872ad2194bdddd39045b83634e8613249182b88f549bb2319d97eb",
     "iso_checksum_type": "sha256",
-    "iso_name": "CentOS-6.7-x86_64-bin-DVD1.iso",
-    "ks_path": "centos-6.7/ks.cfg",
+    "iso_name": "CentOS-7-x86_64-DVD-1611.iso",
+    "ks_path": "centos-7.3/ks.cfg",
     "memory": "8192",
     "metadata": "floppy/dummy_metadata.json",
-    "mirror": "http://archive.kernel.org/centos-vault",
-    "mirror_directory": "6.7/isos/x86_64",
-    "name": "base-centos-6.7",
+    "mirror": "https://mirrors.kernel.org/centos",
+    "mirror_directory": "7.3.1611/isos/x86_64",
+    "name": "base-centos-7.3",
     "no_proxy": "{{env `no_proxy`}}",
-    "template": "base-centos-6.7",
-    "version": "2.1.TIMESTAMP"
+    "template": "base-centos-7.3",
+    "version": "4.1.TIMESTAMP"
   }
 }

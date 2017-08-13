@@ -5,7 +5,7 @@ Based on the fantastic [Bento](https://github.com/chef/bento) project developed 
 
 Images Provided
 ---------------------
-- base-centos-6.7: Centos 6.7 + HDP. Used in the full-dev-platform Vagrant image
+- base-centos-7.3: Centos 7.3 + HDP. Used in the full-dev-platform Vagrant image, taken from [this point](https://github.com/chef/bento/tree/745e9e6670aa6be97243410218f05d43d5c0d42a).
 - quick-dev-centos-6.7: Centos 6.7 + HDP + Metron. Used for the quick-dev-platform Vagrant image.
 
 Prerequisites
@@ -25,7 +25,7 @@ Build Single Images
  Navigate to *your-project-directory*/metron-deployment/packer-build
  * Base Centos (full-dev)
  ```
-bin/bento build base-centos-6.7.json
+bin/bento build base-centos-7.3.json
 ```
  * Quick Dev
  ```
