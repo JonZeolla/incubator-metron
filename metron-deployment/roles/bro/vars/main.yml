@@ -16,7 +16,7 @@
 #
 ---
 bro_home: /usr/local/bro
-bro_version: 2.4.2
+bro_version: 2.5.2
 bro_daemon_log: /var/log/bro.log
 bro_topic: bro
 
@@ -24,3 +24,6 @@ bro_topic: bro
 bro_crontab_minutes: 0-59/5
 bro_crontab_job: "{{ bro_home }}/bin/broctl cron"
 bro_clean_job: "rm -rf {{ bro_home }}/spool/tmp/*"
+
+# centos6-specific build requirements
+bro_centos6_devtools_repo: "https://people.centos.org/tru/devtools-2/devtools-2.repo"
