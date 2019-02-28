@@ -344,7 +344,7 @@ function run_tests {
 
         verify_licenses
       elif [[ "${UPSTREAM}" == "${BRO_PLUGIN_UPSTREAM}" ]]; then
-        echo "We don't currently support running metron-bro-plugin-kafka tests in this script"
+        run_bro_plugin_docker_end_to_end
       fi
     fi
 
@@ -456,3 +456,18 @@ function please_review_then {
     echo "    git push upstream $BASE_BRANCH"
     echo ""
 }
+
+#
+# Run the end to end docker tests for the bro plugin, which includes the btest
+# unit tests
+#
+function run_bro_plugin_docker_end_to_end {
+    cd "${WORK}"/docker &> /dev/null || { echo "failed to change directory to ${WORK}" ; exit 1 ;}
+    ./run_end_to_end.sh
+
+    rc=$?; if [[ ${rc} != 0 ]]; then
+        echo "ERROR> FAILED Bro plugin docker end to end tests"
+        exit ${rc}
+    fi
+}
+
